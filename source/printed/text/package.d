@@ -101,7 +101,7 @@ interface ITextLayouter
     /// `fontWeight`, `fontStyle` and `textAlign`.
     void save();
 
-    /// Restore the last saved state.α
+    /// Restore the last saved state.
     ///
     /// See_also: `save()`
     void restore();
