@@ -39,12 +39,10 @@ enum TextAlign
 
 interface ITextLayouter
 {
-    /// Set or get the size of the area were the text is laid out. The text is
-    /// automatically broken across pages. Both dimensions may be infinite
-    /// which suppresses line breaks in case of the width and page breaks in
-    /// case of the height.
-    ///
-    /// See_also: `newText()`
+    /// Size of the area were the text is laid out. The text is automatically
+    /// broken across pages. Both dimensions may be infinite which suppresses
+    /// line breaks in case of the width and page breaks in case of the
+    /// height.
     void textWidth(float x);
     /// ditto
     float textWidth();
@@ -53,9 +51,12 @@ interface ITextLayouter
     /// ditto
     float textHeight();
 
-    /// Set the current line spacing relative to the current font size. This
-    /// applies to all subsequent pages until it is changed.
+    /// Current line spacing relative to the current font size. This applies
+    /// to the whole paragraph when it ends either implicitly via `layout()`
+    /// or explicitly via `newParagraph()`.
     void lineSpacing(float factor);
+    /// ditto
+    float lineSpacing();
 
     /// End the current and start a new paragraph. The first paragraph is
     /// created implicitly. This is equivalent to writing two newline
@@ -70,25 +71,35 @@ interface ITextLayouter
     /// Continue layout on a new page.
     void endPage();
 
-    /// Set the current font size. This applies to all subsequent text until
-    /// it is changed.
+    /// Current font size. This applies to all subsequent text until it is
+    /// changed.
     void fontSize(float mm);
+    /// ditto
+    float fontSize();
 
-    /// Set the text color. This applies to all subsequent text until it is
+    /// Current text color. This applies to all subsequent text until it is
     /// changed.
     void color(Brush color);
+    /// ditto
+    Brush color();
 
-    /// Set the current font size. This applies to all subsequent text until
-    /// it is changed.
+    /// Current font size. This applies to all subsequent text until it is
+    /// changed.
     void fontFace(string face);
+    /// ditto
+    string fontFace();
 
-    /// Set the current font weight. This applies to all subsequent text until
-    /// it is changed.
+    /// Current font weight. This applies to all subsequent text until it is
+    /// changed.
     void fontWeight(FontWeight weight);
+    /// ditto
+    FontWeight fontWeight();
 
-    /// Set the current font style. This applies to all subsequent text until
-    /// it is changed.
+    /// Current font style. This applies to all subsequent text until it is
+    /// changed.
     void fontStyle(FontStyle style);
+    /// ditto
+    FontStyle fontStyle();
 
     /// Current text alignment strategy. This applies to the whole paragraph
     /// when it ends either implicitly via `layout()` or explicitly via
