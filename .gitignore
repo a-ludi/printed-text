@@ -1,0 +1,11 @@
+.dub
+/printed-text-test-*
+/libprinted-text*
+*.exe
+*.o
+*.obj
+*.log
+*~
+*.tar
+*.tar.gz
+.gdbinit

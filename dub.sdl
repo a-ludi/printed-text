@@ -1,0 +1,8 @@
+name        "printed-text"
+description "Text layout engine on top of `printed` graphics package."
+authors     "Arne Ludwig"
+copyright   "Copyright © 2021, Arne Ludwig"
+license     "MIT"
+
+dependency  "printed:canvas" version="~>1.1.2"
+dependency  "printed:font"   version="~>1.1.2"
