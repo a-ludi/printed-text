@@ -12,6 +12,31 @@ import printed.canvas;
 import printed.font;
 
 
+enum TextAlign
+{
+    /// Align to the start edge of the text (left side in left-to-right text, right side in right-to-left text).
+    /// This is the default.
+    start,
+
+    /// Align to the end edge of the text (right side in left-to-right text, left side in right-to-left text).
+    end,
+
+    /// Align to the left.
+    left,
+
+    /// Align to the right.
+    right,
+
+    /// Align to the center.
+    center,
+
+    /// The line contents are justified. Text should be spaced to line up its
+    /// left and right edges to the left and right edges of the line box,
+    /// except for the last line.
+    justify,
+}
+
+
 interface ITextLayouter
 {
     /// Set or get the size of the area were the text is laid out. The text is
@@ -65,8 +90,15 @@ interface ITextLayouter
     /// it is changed.
     void fontStyle(FontStyle style);
 
+    /// Current text alignment strategy. This applies to the whole paragraph
+    /// when it ends either implicitly via `layout()` or explicitly via
+    /// `newParagraph()`.
+    void textAlign(TextAlign align_);
+    /// ditto
+    TextAlign textAlign();
+
     /// Save the current state, i.e. `fontSize`, `color`, `fontFace`,
-    /// `fontWeight` and `fontStyle`.
+    /// `fontWeight`, `fontStyle` and `textAlign`.
     void save();
 
     /// Restore the last saved state.α
