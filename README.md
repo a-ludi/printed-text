@@ -3,7 +3,7 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat)](https://github.com/RichardLitt/standard-readme)
 ![GitHub](https://img.shields.io/github/license/a-ludi/printed-text)
-[![DUB](https://img.shields.io/dub/v/dentist)](https://code.dlang.org/packages/printed-text)
+[![DUB](https://img.shields.io/dub/v/printed-text)](https://code.dlang.org/packages/printed-text)
 
 > Text layout engine on top of `printed` graphics package.
 
@@ -15,10 +15,6 @@ Table of Contents
 
 - [Install](#install)
 - [Usage](#usage)
-- [Example](#example)
-- [Configuration](#configuration)
-- [Troubleshooting](#troubleshooting)
-- [Citation](#citation)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
 - [License](#license)
@@ -32,13 +28,13 @@ With `dub add printed-text`.
 With `dub.sdl`:
 
 ```sdl
-dependency "printed:canvas" version="~>1.0"
+dependency "printed-text" version=">=0.0.0"
 ```
 
 With `dub.json`:
 
 ```json
-"dependencies": { "printed:canvas": "~>1.0" }
+"dependencies": { "printed-text": ">=0.0.0" }
 ```
 
 
@@ -52,7 +48,7 @@ Usage
 Maintainer
 ----------
 
-DENTIST is being developed by Arne Ludwig &lt;<ludwig@mpi-cbg.de>&gt;.
+`printed-text` is being developed by Arne Ludwig &lt;<arne.ludwig@posteo.de>&gt;.
 
 
 Contributing
