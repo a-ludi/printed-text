@@ -41,7 +41,32 @@ With `dub.json`:
 Usage
 -----
 
+Here is a minimal example. More examples can be found under
+[`docs/exmaples`](./docs/exmaples).
+
 ```d
+import printed.canvas;
+import printed.text;
+
+void loremIpsum(IRenderingContext2D renderer, ITextLayouter textLayouter)
+{
+    with (textLayouter)
+    {
+        textWidth = 150f; //mm
+        fontFace = "Arial";
+        fontSize = 10f; //pt
+
+        textLayouter.group({
+            fontSize = 16f; //pt
+            fontWeight = FontWeight.bold;
+            write("Lorem Ipsum\n");
+        });
+        write("\n")
+        write("Lorem ipsum dolor sit amet.");
+        foreach (block; layout())
+            block.renderWith(renderer);
+    }
+}
 ```
 
 
