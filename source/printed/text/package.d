@@ -134,11 +134,27 @@ interface ITextLayouter
 }
 
 
+/// Wrap `yield` with `save()` and `restore()`.
 void group(ITextLayouter layouter, void delegate() yield)
+in (layouter !is null)
 {
     layouter.save();
     yield();
     layouter.restore();
+}
+
+///
+unittest
+{
+    void varyingTextSize(ITextLayouter layouter) {
+        layouter.write("Small text. ");
+        layouter.group({
+            layouter.fontSize = 12f;
+
+            layouter.write("Large text. ");
+        });
+        layouter.write("Small again.");
+    }
 }
 
 
