@@ -38,6 +38,74 @@ enum TextAlign
 }
 
 
+/// The scope various attributes apply to while creating text layouts.
+///
+/// For example, the font face, style, weight and size apply to all characters
+/// that are written while they are in effect while line spacing and text
+/// alignment apply to whole paragraphs.
+enum TextLayoutScope
+{
+    /// Attributes in this scope apply to all characters that are written
+    /// using `write()` after setting them.
+    ///
+    /// Examples:
+    ///
+    /// ```
+    /// fontSize = 12;
+    /// fontWeight = FontWeight.bold;
+    ///
+    /// write("Hello\n"); // produces a single line containing the word
+    ///                   // "Hello" in bold letters and font size 12
+    /// write("World\n"); // same font size and weight
+    ///
+    /// fontWeight = FontWeight.normal;
+    ///
+    /// write("How are you?"); // This line will have normal font weight
+    /// ```
+    character,
+    /// Attributes in this scope apply to the paragraphs that are ended
+    /// explicitly by `endParagraph()` or implicitly by `layout()`.
+    ///
+    /// Examples:
+    ///
+    /// ```
+    /// lineSpacing = 1f;
+    ///
+    /// write("Hello World");
+    /// endParagraph(); // This paragraph will have a regular line spacing
+    ///
+    /// lineSpacing = 2f;
+    ///
+    /// write("How are you?");
+    /// endParagraph(); // This paragraph has double line spacing
+    ///
+    /// write("So long, and thanks for all the fish.")
+    /// layout(); // The last paragraph also has double line spacing.
+    /// ```
+    paragraph,
+    /// Attributes in this scope apply to the pages that are ended
+    /// explicitly by `endPage()` or implicitly by `layout()`.
+    ///
+    /// Examples:
+    ///
+    /// ```
+    /// textWidth = 210f;
+    ///
+    /// write("Hello World");
+    /// endPage(); // This page will have a width of 210mm
+    ///
+    /// textWidth = 105f;
+    ///
+    /// write("How are you?");
+    /// endPage(); // This page has a width of 105mm
+    ///
+    /// write("So long, and thanks for all the fish.")
+    /// layout(); // The last page also has a width of 105mm
+    /// ```
+    page,
+}
+
+
 /// Main interface for creating text layouts with simple text formatting
 /// like varying fonts, font sizes etc. and structural cues like manual
 /// paragraph and page breaks.
@@ -47,6 +115,8 @@ interface ITextLayouter
     /// broken across pages. Both dimensions may be infinite which suppresses
     /// line breaks in case of the width and page breaks in case of the
     /// height.
+    ///
+    /// Scope: `TextLayoutScope.page`
     void textWidth(float x);
     /// ditto
     float textWidth();
@@ -55,12 +125,19 @@ interface ITextLayouter
     /// ditto
     float textHeight();
 
-    /// Current line spacing relative to the current font size. This applies
-    /// to the whole paragraph when it ends either implicitly via `layout()`
-    /// or explicitly via `newParagraph()`.
+    /// Current line spacing relative to the current font size.
+    ///
+    /// Scope: `TextLayoutScope.paragraph`
     void lineSpacing(float factor);
     /// ditto
     float lineSpacing();
+
+    /// Current text alignment strategy.
+    ///
+    /// Scope: `TextLayoutScope.paragraph`
+    void textAlign(TextAlign align_);
+    /// ditto
+    TextAlign textAlign();
 
     /// End the current and start a new paragraph. The first paragraph is
     /// created implicitly and the last paragraph should not be closed.
@@ -71,51 +148,49 @@ interface ITextLayouter
     /// Continue layout on a new page.
     void endPage();
 
-    /// Current font size. This applies to all subsequent text until it is
-    /// changed.
+    /// Current font size.
+    ///
+    /// Scope: `TextLayoutScope.character`
     void fontSize(float mm);
     /// ditto
     float fontSize();
 
-    /// Current text color. This applies to all subsequent text until it is
-    /// changed.
+    /// Current text color.
+    ///
+    /// Scope: `TextLayoutScope.character`
     void color(Brush color);
     /// ditto
     Brush color();
 
-    /// Current font size. This applies to all subsequent text until it is
-    /// changed.
+    /// Current font size.
+    ///
+    /// Scope: `TextLayoutScope.character`
     void fontFace(string face);
     /// ditto
     string fontFace();
 
-    /// Current font weight. This applies to all subsequent text until it is
-    /// changed.
+    /// Current font weight.
+    ///
+    /// Scope: `TextLayoutScope.character`
     void fontWeight(FontWeight weight);
     /// ditto
     FontWeight fontWeight();
 
-    /// Current font style. This applies to all subsequent text until it is
-    /// changed.
+    /// Current font style.
+    ///
+    /// Scope: `TextLayoutScope.character`
     void fontStyle(FontStyle style);
     /// ditto
     FontStyle fontStyle();
 
-    /// Current text alignment strategy. This applies to the whole paragraph
-    /// when it ends either implicitly via `layout()` or explicitly via
-    /// `newParagraph()`.
-    void textAlign(TextAlign align_);
-    /// ditto
-    TextAlign textAlign();
-
-    /// Save the current state, i.e. `fontSize`, `color`, `fontFace`,
+    /// Save the current state of the specified scope, i.e. `fontSize`, `color`, `fontFace`,
     /// `fontWeight`, `fontStyle` and `textAlign`.
-    void save();
+    void save(TextLayoutScope scope_);
 
     /// Restore the last saved state.
     ///
     /// See_also: `save()`
-    void restore();
+    void restore(TextLayoutScope scope_);
 
     /// Append `text` to the current page.
     ///
@@ -135,12 +210,16 @@ interface ITextLayouter
 
 
 /// Wrap `yield` with `save()` and `restore()`.
-void group(ITextLayouter layouter, void delegate() yield)
+void group(
+    ITextLayouter layouter,
+    TextLayoutScope scope_,
+    void delegate() yield,
+)
 in (layouter !is null)
 {
-    layouter.save();
+    layouter.save(scope_);
     yield();
-    layouter.restore();
+    layouter.restore(scope_);
 }
 
 ///
@@ -148,7 +227,7 @@ unittest
 {
     void varyingTextSize(ITextLayouter layouter) {
         layouter.write("Small text. ");
-        layouter.group({
+        layouter.group(TextLayoutScope.character, {
             layouter.fontSize = 12f;
 
             layouter.write("Large text. ");
