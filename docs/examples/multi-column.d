@@ -39,13 +39,13 @@ void printExample(IRenderingContext2D renderer, ITextLayouter textLayouter)
         fontFace = .fontFace;
         fontSize = .fontSize;
 
-        save();
+        save(TextLayoutScope.character);
             fontSize = .headerFontSize;
             fontWeight = FontWeight.bold;
             write("Lorem Ipsum");
             auto headerBlock = layout()[0];
             clear();
-        restore();
+        restore(TextLayoutScope.character);
 
         const columnWidth = (textWidth - (numColumns - 1)*columnGap) / numColumns;
         const columnHeight = pageHeight - 2f*pagePadding - headerBlock.filledHeight;
@@ -53,7 +53,7 @@ void printExample(IRenderingContext2D renderer, ITextLayouter textLayouter)
         textWidth = columnWidth;
         textHeight = columnHeight;
 
-        textLayouter.group({
+        textLayouter.group(TextLayoutScope.character, {
             fontStyle = FontStyle.italic;
             write("Lorem ipsum dolor sit amet");
         });
@@ -67,10 +67,10 @@ void printExample(IRenderingContext2D renderer, ITextLayouter textLayouter)
         endParagraph();
 
         write("Duis autem vel eum ");
-        save();
+        save(TextLayoutScope.character);
             fontWeight = FontWeight.bold;
             write("iriure");
-        restore();
+        restore(TextLayoutScope.character);
         write(" dolor in hendrerit in vulputate velit esse molestie ");
         write("consequat, vel illum dolore eu feugiat nulla facilisis at ");
         write("vero eros et accumsan et iusto odio dignissim qui blandit ");
