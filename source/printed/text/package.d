@@ -162,8 +162,6 @@ unittest
 /// provides the hyphen character used for hyphenation.
 interface ILocale
 {
-    import std.array : join;
-
     /// Returns slices of `text` that represent individual words interleaved
     /// with the content that separates them.
     string[] breakWords(string text)
