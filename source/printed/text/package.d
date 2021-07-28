@@ -12,6 +12,7 @@ import printed.canvas;
 import printed.font;
 
 
+/// Available text alignment modes.
 enum TextAlign
 {
     /// Align to the start edge of the text (left side in left-to-right text, right side in right-to-left text).
@@ -37,6 +38,9 @@ enum TextAlign
 }
 
 
+/// Main interface for creating text layouts with simple text formatting
+/// like varying fonts, font sizes etc. and structural cues like manual
+/// paragraph and page breaks.
 interface ITextLayouter
 {
     /// Size of the area were the text is laid out. The text is automatically
@@ -59,13 +63,9 @@ interface ITextLayouter
     float lineSpacing();
 
     /// End the current and start a new paragraph. The first paragraph is
-    /// created implicitly. This is equivalent to writing two newline
-    /// characters:
-    ///
-    ///     writeln();
-    ///     writeln();
-    ///
-    /// Two or more newline characters separate paragraphs.
+    /// created implicitly and the last paragraph should not be closed.
+    /// Closing it will create an empty paragraph which may consume space of
+    /// the text area.
     void endParagraph();
 
     /// Continue layout on a new page.
