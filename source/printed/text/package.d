@@ -198,6 +198,8 @@ interface ITextLayouter
     /// strings.
     void write(string text);
     /// ditto
+    void write(char text);
+    /// ditto
     alias put = write;
 
     /// Compute the text layout with the current text and text dimensions and
