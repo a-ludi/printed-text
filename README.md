@@ -42,7 +42,7 @@ Usage
 -----
 
 Here is a minimal example. More examples can be found under
-[`docs/exmaples`](./docs/exmaples).
+[`docs/examples`](./docs/examples).
 
 ```d
 import printed.canvas;
